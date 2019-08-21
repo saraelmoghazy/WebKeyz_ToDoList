@@ -1,9 +1,8 @@
 package com.webkeyz.todo.components;
 
-import com.webkeyz.todo.modules.RetrofitClientModule;
 import com.webkeyz.todo.modules.TasksRepoModule;
 import com.webkeyz.todo.scope.RepoScope;
-import com.webkeyz.todo.viewModel.TaskViewModel;
+import com.webkeyz.todo.usecase.TasksUseCase;
 
 import dagger.Component;
 
@@ -11,7 +10,7 @@ import dagger.Component;
 @RepoScope
 public interface TaskRepoComponent {
 
-    void Inject(TaskViewModel viewModel);
+    void Inject(TasksUseCase tasksUseCase);
 
     class Initializer{
         static TaskRepoComponent taskRepoComponent;

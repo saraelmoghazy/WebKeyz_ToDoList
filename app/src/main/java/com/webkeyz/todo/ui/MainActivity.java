@@ -12,7 +12,7 @@ import com.webkeyz.todo.components.ContextComponent;
 import com.webkeyz.todo.components.DaggerContextComponent;
 import com.webkeyz.todo.model.Task;
 import com.webkeyz.todo.modules.ContextModule;
-import com.webkeyz.todo.viewModel.TaskViewModel;
+import com.webkeyz.todo.viewModel.TasksViewModel;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     public static ContextComponent contextComponent;
-    private TaskViewModel viewModel;
+    private TasksViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
                     .contextModule(new ContextModule(getApplicationContext())).build();
         }
 
-        viewModel = ViewModelProviders.of(MainActivity.this).get(TaskViewModel.class);
-        viewModel.getTasks().observe(this, new Observer<List<Task>>() {
+        viewModel = ViewModelProviders.of(MainActivity.this).get(TasksViewModel.class);
+        viewModel.getTaskList().observe(this, new Observer<List<Task>>() {
             @Override
             public void onChanged(List<Task> tasks) {
                 Log.d(TAG, "onChanged: " + tasks.size());
