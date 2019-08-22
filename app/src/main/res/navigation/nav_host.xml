@@ -9,5 +9,14 @@
         android:id="@+id/mainFragment"
         android:name="com.webkeyz.todo.ui.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_editTaskFragment"
+            app:destination="@id/editTaskFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editTaskFragment"
+        android:name="com.webkeyz.todo.ui.EditTaskFragment"
+        android:label="fragment_add_task"
+        tools:layout="@layout/fragment_edit_task" />
 </navigation>

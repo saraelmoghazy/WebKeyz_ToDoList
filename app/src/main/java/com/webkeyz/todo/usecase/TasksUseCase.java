@@ -1,5 +1,7 @@
 package com.webkeyz.todo.usecase;
 
+import android.util.Log;
+
 import com.webkeyz.todo.components.TaskRepoComponent;
 import com.webkeyz.todo.model.Task;
 import com.webkeyz.todo.repo.TasksRepo;
@@ -16,6 +18,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class TasksUseCase {
 
+    private static final String TAG = TasksUseCase.class.getSimpleName();
     @Inject
     TasksRepo tasksRepo;
     private CompositeDisposable disposables;
@@ -37,6 +40,7 @@ public class TasksUseCase {
     public void setDisposable(){
         if(!disposables.isDisposed()){
             disposables.dispose();
+            Log.d(TAG, "setDisposable");
         }
     }
 }

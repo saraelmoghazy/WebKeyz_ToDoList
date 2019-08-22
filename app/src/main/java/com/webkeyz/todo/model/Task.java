@@ -12,6 +12,8 @@ public class Task {
     private String date;
     @SerializedName("status")
     private String status;
+    @SerializedName("content")
+    private String content;
 
     public String getId() {
         return id;
@@ -43,5 +45,13 @@ public class Task {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

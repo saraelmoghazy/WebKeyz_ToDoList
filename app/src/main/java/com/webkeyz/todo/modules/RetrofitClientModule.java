@@ -6,6 +6,7 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.webkeyz.todo.remote.ClientAPI;
 import com.webkeyz.todo.scope.RetrofitScope;
 import com.webkeyz.todo.utils.CheckNetwork;
+import com.webkeyz.todo.utils.RxErrorHandlingCallAdapterFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,7 +50,7 @@ public class RetrofitClientModule {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -57,19 +58,15 @@ public class RetrofitClientModule {
     }
 
     private Interceptor contentTypeInterceptor() {
-        return new Interceptor() {
-            @NotNull
-            @Override
-            public Response intercept(@NotNull Chain chain) throws IOException {
-                Request original = chain.request();
-                Request.Builder requestBuilder = original.newBuilder()
-                        .addHeader("Accept", "application/json")
-                        .addHeader("Request-Type", "Android")
-                        .addHeader("Content-Type", "application/json");
+        return chain -> {
+            Request original = chain.request();
+            Request.Builder requestBuilder = original.newBuilder()
+                    .addHeader("Accept", "application/json")
+                    .addHeader("Request-Type", "Android")
+                    .addHeader("Content-Type", "application/json");
 
-                Request request = requestBuilder.build();
-                return chain.proceed(request);
-            }
+            Request request = requestBuilder.build();
+            return chain.proceed(request);
         };
     }
 
