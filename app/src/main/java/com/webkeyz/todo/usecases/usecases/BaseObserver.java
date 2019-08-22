@@ -1,6 +1,5 @@
 package com.webkeyz.todo.usecases.usecases;
 
-import android.util.Log;
 
 import com.webkeyz.todo.presentation.BaseViewModel;
 import com.webkeyz.todo.usecases.network.RetrofitException;
