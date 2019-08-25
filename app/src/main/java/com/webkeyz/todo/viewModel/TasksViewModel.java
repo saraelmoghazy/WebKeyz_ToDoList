@@ -7,12 +7,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.webkeyz.todo.components.TasksUCComponent;
-import com.webkeyz.todo.model.ErrorResponse;
 import com.webkeyz.todo.model.Task;
 import com.webkeyz.todo.usecase.TasksUseCase;
-import com.webkeyz.todo.utils.RetrofitException;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -38,7 +35,7 @@ public class TasksViewModel extends ViewModel {
             public void onNext(List<Task> tasks) {
                 taskList.setValue(tasks);
                 if(tasks.size() == 0)
-                    noTasks.postValue(true);
+                    noTasks.setValue(true);
             }
 
             @Override

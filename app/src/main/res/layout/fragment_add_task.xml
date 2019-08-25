@@ -16,7 +16,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:hint="@string/new_task"
+        android:hint="@string/name_task"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:hint="@string/name_task"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
@@ -50,6 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:hint="@string/add_details"
             android:textSize="12sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -67,12 +69,22 @@
         android:id="@+id/imgDate"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:src="@drawable/ic_date"
         app:layout_constraintStart_toEndOf="@+id/imgContent"
         app:layout_constraintTop_toTopOf="@+id/imgContent" />
 
+    <ImageView
+        android:id="@+id/imgWatch"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_watch"
+        app:layout_constraintStart_toEndOf="@+id/imgDate"
+        app:layout_constraintTop_toTopOf="@+id/imgDate" />
+
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

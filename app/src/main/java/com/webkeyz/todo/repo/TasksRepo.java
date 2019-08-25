@@ -13,21 +13,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.Provides;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observables.ConnectableObservable;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 public class TasksRepo {
 
     @Inject
     ClientAPI clientAPI;
-    private ConnectableObservable<List<Task>> observable;
     private static final String TAG = TasksRepo.class.getSimpleName();
-    private MutableLiveData<List<Task>> taskList = new MutableLiveData<>();
 
     public TasksRepo()
     {

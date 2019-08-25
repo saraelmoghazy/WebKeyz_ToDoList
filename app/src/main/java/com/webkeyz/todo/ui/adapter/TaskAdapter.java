@@ -1,6 +1,7 @@
 package com.webkeyz.todo.ui.adapter;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,9 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.webkeyz.todo.R;
 import com.webkeyz.todo.model.Task;
 
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +52,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         mDrawableImage = TextDrawable.builder()
                 .buildRound(letter, color);
         holder.image.setImageDrawable(mDrawableImage);
+
+        String longV = list.get(position).getDate();
+        long millisecond = Long.parseLong(longV);
+        String dateString = DateFormat.format("MMM, dd yyyy", new Date(millisecond)).toString();
+        holder.tvDate.setText(dateString);
     }
 
     @Override
