@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.webkeyz.todo.R;
+import com.webkeyz.todo.baseCase.BaseFragment;
+import com.webkeyz.todo.baseCase.BaseViewModel;
 import com.webkeyz.todo.model.Task;
 import com.webkeyz.todo.ui.adapter.RecyclerItemClickListener;
 import com.webkeyz.todo.ui.adapter.TaskAdapter;
@@ -34,7 +36,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment implements AddTaskFragment.AddTaskListener {
+public class MainFragment extends BaseFragment implements AddTaskFragment.AddTaskListener {
 
     private static final String TAG = MainFragment.class.getSimpleName();
     @BindView(R.id.rvTasks)
@@ -45,6 +47,8 @@ public class MainFragment extends Fragment implements AddTaskFragment.AddTaskLis
     FloatingActionButton fab;
     @BindView(R.id.animation)
     LottieAnimationView animation;
+    @BindView(R.id.loadingAnimation)
+    LottieAnimationView loadingAnimation;
     private TaskAdapter adapter;
     private List<Task> tasksList = new ArrayList<>();
     private TasksViewModel viewModel;
@@ -60,13 +64,25 @@ public class MainFragment extends Fragment implements AddTaskFragment.AddTaskLis
 
 
     @Override
+    public BaseViewModel getViewModel() {
+        viewModel = ViewModelProviders.of(this).get(TasksViewModel.class);
+        return viewModel;
+    }
+
+    @Override
+    public LottieAnimationView getAnimation() {
+        return loadingAnimation;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
-
         init();
+
+        //TODO:: ADD THE TASK THAT ADDED BEFORE FROM ADD TASK FRAGMENT
 
         return view;
     }
@@ -77,7 +93,6 @@ public class MainFragment extends Fragment implements AddTaskFragment.AddTaskLis
     }
 
     private void initVM() {
-        viewModel = ViewModelProviders.of(this).get(TasksViewModel.class);
         viewModel.getTaskList().observe(this, tasks -> {
             tasksList.clear();
             tasksList.addAll(tasks);
@@ -130,7 +145,7 @@ public class MainFragment extends Fragment implements AddTaskFragment.AddTaskLis
         });
     }
 
-    private void hideAnimation(){
+    private void hideAnimation() {
         animation.setVisibility(View.GONE);
     }
 }

@@ -10,22 +10,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/appBar"
-            layout="@layout/view_toolbar" />
-
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animation"
             android:layout_width="180dp"
             android:layout_height="180dp"
+            android:layout_marginTop="8dp"
+            android:fitsSystemWindows="true"
             android:scaleType="centerCrop"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:lottie_fileName="success.json"
-            android:visibility="gone"
-            android:fitsSystemWindows="true"/>
+            app:layout_constraintTop_toBottomOf="@+id/groupRadio"
+            app:lottie_fileName="success.json" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tlName"
@@ -38,7 +35,7 @@
             app:hintEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBar">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -205,17 +202,19 @@
 
         </RadioGroup>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/save"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/save"
-            android:textColor="@color/black"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loadingAnimation"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groupRadio" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_fileName="loading.json"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:visibility="gone"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

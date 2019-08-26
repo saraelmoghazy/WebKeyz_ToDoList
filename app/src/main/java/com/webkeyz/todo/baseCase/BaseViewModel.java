@@ -1,31 +1,27 @@
 package com.webkeyz.todo.baseCase;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-import io.reactivex.observers.DisposableObserver;
+public abstract class BaseViewModel<T> extends ViewModel {
 
-public abstract class BaseViewModel<T> {
+    private MutableLiveData<Boolean> loading = new MutableLiveData<>();
+    private MutableLiveData<String> error = new MutableLiveData<>();
 
-    private MutableLiveData<T> date = new MutableLiveData<>();
 
-    public LiveData<T> execute(DisposableObserver<T> observer){
-        observer = new DisposableObserver<T>() {
-            @Override
-            public void onNext(T t) {
-                date.postValue(t);
-            }
+    public MutableLiveData<Boolean> getLoading() {
+        return loading;
+    }
 
-            @Override
-            public void onError(Throwable e) {
+    public void setLoading(MutableLiveData<Boolean> loading) {
+        this.loading = loading;
+    }
 
-            }
+    public MutableLiveData<String> getError() {
+        return error;
+    }
 
-            @Override
-            public void onComplete() {
-
-            }
-        };
-        return date;
+    public void setError(MutableLiveData<String> error) {
+        this.error = error;
     }
 }

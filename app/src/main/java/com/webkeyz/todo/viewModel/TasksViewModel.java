@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.webkeyz.todo.baseCase.BaseObserver;
+import com.webkeyz.todo.baseCase.BaseViewModel;
 import com.webkeyz.todo.components.TasksUCComponent;
 import com.webkeyz.todo.model.Task;
 import com.webkeyz.todo.usecase.TasksUseCase;
@@ -16,7 +18,7 @@ import javax.inject.Inject;
 
 import io.reactivex.observers.DisposableObserver;
 
-public class TasksViewModel extends ViewModel {
+public class TasksViewModel extends BaseViewModel {
 
     @Inject
     TasksUseCase tasksUseCase;
@@ -30,30 +32,21 @@ public class TasksViewModel extends ViewModel {
     }
 
     public void setTasks() {
-        DisposableObserver<List<Task>> observer = new DisposableObserver<List<Task>>() {
+        tasksUseCase.execute(new BaseObserver<List<Task>>(this) {
             @Override
             public void onNext(List<Task> tasks) {
+                super.onNext(tasks);
                 taskList.setValue(tasks);
                 if(tasks.size() == 0)
                     noTasks.setValue(true);
             }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
-        tasksUseCase.observableTasks(observer);
+        });
     }
 
     @Override
     protected void onCleared() {
         super.onCleared();
-        tasksUseCase.setDisposable();
+        tasksUseCase.onClear();
         Log.d(TAG, "onCleared");
     }
 

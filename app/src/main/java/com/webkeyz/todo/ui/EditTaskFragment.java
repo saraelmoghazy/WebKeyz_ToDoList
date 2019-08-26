@@ -16,20 +16,20 @@ import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.webkeyz.todo.R;
+import com.webkeyz.todo.baseCase.BaseFragment;
+import com.webkeyz.todo.baseCase.BaseViewModel;
 import com.webkeyz.todo.model.Task;
 import com.webkeyz.todo.viewModel.EditTaskViewModel;
 
@@ -53,7 +53,7 @@ import static com.webkeyz.todo.ui.MainFragment.BUNDLE_TIMESTAMP;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditTaskFragment extends Fragment {
+public class EditTaskFragment extends BaseFragment {
 
     private static final String TAG = EditTaskFragment.class.getSimpleName();
     @BindView(R.id.tlName)
@@ -68,12 +68,10 @@ public class EditTaskFragment extends Fragment {
     LinearLayout contentTime;
     @BindView(R.id.tlTime)
     TextInputLayout tlTime;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.save)
-    MaterialButton save;
     @BindView(R.id.animation)
     LottieAnimationView animation;
+    @BindView(R.id.loadingAnimation)
+    LottieAnimationView loadingAnimation;
     private String id, name, content, timeStamp, status, date, time;
     private EditTaskViewModel viewModel;
 
@@ -88,9 +86,21 @@ public class EditTaskFragment extends Fragment {
     }
 
     @Override
+    public BaseViewModel getViewModel() {
+        viewModel = ViewModelProviders.of(getActivity()).get(EditTaskViewModel.class);
+        return viewModel;
+    }
+
+    @Override
+    public LottieAnimationView getAnimation() {
+        return loadingAnimation;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_edit_task, container, false);
         ButterKnife.bind(this, view);
 
@@ -102,31 +112,27 @@ public class EditTaskFragment extends Fragment {
         status = getArguments().getString(BUNDLE_STATUS);
 
         init();
-
+        //TODO:: EDIT THE USER CAN CHOOSE RADIO BUTTON
 
         return view;
     }
 
     private void initToolbar() {
-        toolbar.setTitle(getString(R.string.edit_task));
-        toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbar.setNavigationOnClickListener(view -> getActivity().onBackPressed());
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.edit_task));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void init() {
         tlName.getEditText().setText(name);
         tlContent.getEditText().setText(content);
-
         long millisecond = Long.parseLong(timeStamp);
         String dateString = DateFormat.format("MMM, dd yyyy", new Date(millisecond)).toString();
         tlDate.getEditText().setText(dateString);
-        String timeString  = DateFormat.format("HH:mm", new Date(millisecond)).toString();
+        String timeString = DateFormat.format("HH:mm", new Date(millisecond)).toString();
         tlTime.getEditText().setText(timeString);
-
-        viewModel = ViewModelProviders.of(getActivity()).get(EditTaskViewModel.class);
     }
 
-    @OnClick({R.id.linearLayout2, R.id.linearLayout3, R.id.save})
+    @OnClick({R.id.linearLayout2, R.id.linearLayout3})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.linearLayout2:
@@ -134,9 +140,6 @@ public class EditTaskFragment extends Fragment {
                 break;
             case R.id.linearLayout3:
                 showClock();
-                break;
-            case R.id.save:
-                saveTask();
                 break;
         }
     }
@@ -171,20 +174,26 @@ public class EditTaskFragment extends Fragment {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     hideAnimation();
+
+                    //TODO:: UPDATE THE TASK IN MAIN FRAGMENT
                 }
             });
         });
-
-        viewModel.getError().observe(this, s -> Toast.makeText(getContext(), s, Toast.LENGTH_LONG).show());
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.edit_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.save) {
+            loadingAnimation.setVisibility(View.VISIBLE);
+            saveTask();
+        } else if (item.getItemId() == android.R.id.home) {
+        }
         return true;
     }
 
@@ -228,7 +237,7 @@ public class EditTaskFragment extends Fragment {
         mTimePicker.show();
     }
 
-    private void hideAnimation(){
+    private void hideAnimation() {
         animation.setVisibility(View.GONE);
     }
 }

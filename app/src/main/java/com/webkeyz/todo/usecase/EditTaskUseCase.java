@@ -1,5 +1,6 @@
 package com.webkeyz.todo.usecase;
 
+import com.webkeyz.todo.baseCase.BaseUseCase;
 import com.webkeyz.todo.components.EditTaskRepoComponent;
 import com.webkeyz.todo.model.AddTaskResponse;
 import com.webkeyz.todo.model.Task;
@@ -7,34 +8,29 @@ import com.webkeyz.todo.repo.EditTaskRepo;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.Observable;
 
-public class EditTaskUseCase {
+public class EditTaskUseCase extends BaseUseCase<AddTaskResponse> {
 
     @Inject
     EditTaskRepo repo;
-    private CompositeDisposable disposable;
+    private Task task;
+    private String id;
 
     public EditTaskUseCase(){
         EditTaskRepoComponent.initializer.builder().inject(this);
-        disposable = new CompositeDisposable();
     }
 
-    public void observableTask(String id, Task task, DisposableObserver<AddTaskResponse> observer){
-        disposable.add(
-                repo.editTask(id, task)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(observer)
-        );
+    @Override
+    public Observable<AddTaskResponse> getObservable() {
+        return repo.editTask(id, task);
     }
 
-    public void setDisposable(){
-        if(!disposable.isDisposed()){
-            disposable.dispose();
-        }
+    public void setID(String id){
+        this.id = id;
+    }
+
+    public void setTask(Task task){
+        this.task = task;
     }
 }
