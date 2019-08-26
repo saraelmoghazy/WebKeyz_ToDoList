@@ -6,6 +6,7 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -23,9 +24,17 @@ public class NetworkModule {
 
     @Provides
     @CustomScope
+    HttpLoggingInterceptor provideLoggingInterceptor(){
+        return  new HttpLoggingInterceptor()
+        .setLevel(HttpLoggingInterceptor.Level.BODY);
+    }
+
+    @Provides
+    @CustomScope
     OkHttpClient provideOkhttpClient(Cache cache) {
         OkHttpClient.Builder client = new OkHttpClient.Builder();
         client.cache(cache);
+        client.addInterceptor(provideLoggingInterceptor());
         return client.build();
     }
 

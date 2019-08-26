@@ -62,6 +62,7 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.24'
 
     implementation 'io.supercharge:shimmerlayout:2.1.0'
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.2'
 
     def nav_version = "2.2.0-alpha01"
     // Java
