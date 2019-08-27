@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.google.android.material.button.MaterialButton;
 import com.webkeyz.todo.R;
 import com.webkeyz.todo.entities.addtask.TaskBody;
+import com.webkeyz.todo.entities.task.Task;
 import com.webkeyz.todo.presentation.BaseFragment;
 import com.webkeyz.todo.presentation.BaseViewModel;
 
@@ -30,11 +31,10 @@ public class EditFragment extends BaseFragment {
     ImageView deleteImageView;
     @BindView(R.id.btn_save)
     MaterialButton saveButton;
-    public static final String EXTRA_TASK_NAME = "details";
-    public static final String EXTRA_TASK_DATE = "date";
-    public static final String EXTRA_TASK_STATUS = "status";
+    public static final String EXTRA_TASK_NAME = "arg";
     private EditViewModel viewModel;
-    private String taskName,date,status;
+    private String taskName;
+    private Task task;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -44,9 +44,7 @@ public class EditFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         if (getArguments() != null) {
             Bundle bundle = getArguments();
-             taskName= bundle.getString(EXTRA_TASK_NAME);
-             date= bundle.getString(EXTRA_TASK_DATE);
-             status= bundle.getString(EXTRA_TASK_STATUS);
+            task = (Task) bundle.getSerializable(EXTRA_TASK_NAME);
         }
         return view;
     }
@@ -58,14 +56,18 @@ public class EditFragment extends BaseFragment {
     }
 
     @OnClick(R.id.delete_image_view)
-    public void deleteTask(){
+      void deleteTask() {
         viewModel.removeTask(taskName);
 
     }
+
     @OnClick(R.id.btn_save)
-    public void editTask(){
-        TaskBody body=new TaskBody(taskName,date,status);
-        viewModel.editTask(body,taskName);
+     void editTask() {
+        taskName = task.getName();
+        String date = task.getDate();
+        String status = task.getStatus();
+        TaskBody body = new TaskBody(taskName, date, status);
+        viewModel.editTask(body, taskName);
 
     }
 

@@ -2,6 +2,7 @@ package com.webkeyz.todo.presentation.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,23 +10,24 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.webkeyz.todo.R;
 import com.webkeyz.todo.entities.task.Task;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.webkeyz.todo.presentation.edit.EditFragment.EXTRA_TASK_NAME;
+
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ItemsViewHolder> {
-    private Context context;
     private List<Task> list;
-    private OnDeleteSwipeListener listener;
-    public TasksAdapter(List<Task> list, Context context) {
+    public TasksAdapter(List<Task> list) {
         this.list = list;
-        this.context = context;
     }
 
     @NonNull
@@ -44,17 +46,11 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ItemsViewHol
         String taskDate = details.getDate();
         holder.taskNameTextView.setText(taskName);
         holder.taskDateTextView.setText(taskDate);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
+        holder.itemView.setOnClickListener(view -> {
+            Bundle bundle=new Bundle();
+            bundle.putSerializable(EXTRA_TASK_NAME, (Serializable) details);
+            Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_editFragment,bundle);
         });
-    }
-
-    public void deleteItem(int position) {
-        list.remove(position);
-        notifyItemRemoved(position);
-        listener.onSwipeDelete(position);
     }
 
     @Override

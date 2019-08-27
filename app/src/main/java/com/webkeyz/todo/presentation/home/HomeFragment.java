@@ -42,7 +42,7 @@ public class HomeFragment extends BaseFragment {
 
     private void observeGetTasks() {
         viewModel.tasks.observe(this, tasks -> {
-                    adapter = new TasksAdapter(tasks, getActivity());
+                    adapter = new TasksAdapter(tasks);
                     taskRecycler.setAdapter(adapter);
                 }
         );

@@ -4,7 +4,9 @@ package com.webkeyz.todo.entities.task;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Task {
+import java.io.Serializable;
+
+public class Task implements Serializable {
 
     @SerializedName("date")
     @Expose
