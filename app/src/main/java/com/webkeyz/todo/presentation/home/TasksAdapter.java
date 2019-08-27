@@ -23,10 +23,9 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ItemsViewHol
     private Context context;
     private List<Task> list;
     private OnDeleteSwipeListener listener;
-    public TasksAdapter(List<Task> list, Context context, OnDeleteSwipeListener listener) {
+    public TasksAdapter(List<Task> list, Context context) {
         this.list = list;
         this.context = context;
-        this.listener=listener;
     }
 
     @NonNull

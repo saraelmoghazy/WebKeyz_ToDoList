@@ -6,20 +6,14 @@ import com.webkeyz.todo.usecases.network.RetrofitException;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
-public class BaseObserver<T> implements Observer<T> {
+public class BaseObserver<T> extends DisposableObserver<T> {
 
     BaseViewModel viewModel;
 
     public BaseObserver(BaseViewModel viewModel) {
         this.viewModel = viewModel;
-    }
-
-    @Override
-    public void onSubscribe(Disposable d) {
-        viewModel.isLoading.setValue(true);
-        viewModel.hasNetworkError.setValue(false);
-        viewModel.hasRequestError.setValue(false);
     }
 
     @Override

@@ -42,7 +42,7 @@ public class HomeFragment extends BaseFragment {
 
     private void observeGetTasks() {
         viewModel.tasks.observe(this, tasks -> {
-                    adapter = new TasksAdapter(tasks, getActivity(), position -> viewModel.removeTask(tasks.get(position).getName()));
+                    adapter = new TasksAdapter(tasks, getActivity());
                     taskRecycler.setAdapter(adapter);
                 }
         );
@@ -75,8 +75,6 @@ public class HomeFragment extends BaseFragment {
     private void initRecycler() {
         taskRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         taskRecycler.setHasFixedSize(true);
-        ItemTouchHelper itemTouchHelper = new
-                ItemTouchHelper(new SwipeToDeleteCallback(adapter));
-        itemTouchHelper.attachToRecyclerView(taskRecycler);
+
     }
 }

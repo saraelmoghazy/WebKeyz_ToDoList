@@ -22,16 +22,13 @@ public class TasksViewModel extends BaseViewModel {
     MutableLiveData<String> status;
     private TaskUseCases useCases;
     private AddTaskUseCase addTaskUseCase;
-    private EditTaskUseCase editTaskUseCase;
-    private RemoveTaskUseCase removeTaskUseCase;
+
 
     public TasksViewModel() {
         tasks = new MutableLiveData<>();
         status = new MutableLiveData<>();
         useCases = new TaskUseCases();
         addTaskUseCase=new AddTaskUseCase();
-        editTaskUseCase=new EditTaskUseCase();
-        removeTaskUseCase=new RemoveTaskUseCase();
         getTask();
     }
 
@@ -56,29 +53,5 @@ public class TasksViewModel extends BaseViewModel {
             }
         };
         addTaskUseCase.execute(observer);
-    }
-
-    public void editTask(TaskBody body,String name){
-       editTaskUseCase.setTaskBody(body,name);
-        BaseObserver observer = new BaseObserver<AddTaskResponse>(this){
-            @Override
-            public void onNext(AddTaskResponse response) {
-                super.onNext(response);
-                status.setValue(response.getStatus());
-            }
-        };
-        editTaskUseCase.execute(observer);
-    }
-
-    public void removeTask(String name){
-        removeTaskUseCase.setTaskName(name);
-        BaseObserver observer = new BaseObserver<AddTaskResponse>(this){
-            @Override
-            public void onNext(AddTaskResponse response) {
-                super.onNext(response);
-                status.setValue(response.getStatus());
-            }
-        };
-        removeTaskUseCase.execute(observer);
     }
 }

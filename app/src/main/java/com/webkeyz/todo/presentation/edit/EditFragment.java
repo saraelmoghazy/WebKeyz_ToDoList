@@ -1,111 +1,72 @@
 package com.webkeyz.todo.presentation.edit;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 
+import com.google.android.material.button.MaterialButton;
 import com.webkeyz.todo.R;
+import com.webkeyz.todo.entities.addtask.TaskBody;
+import com.webkeyz.todo.presentation.BaseFragment;
+import com.webkeyz.todo.presentation.BaseViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link EditFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link EditFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class EditFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
-    public EditFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EditFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static EditFragment newInstance(String param1, String param2) {
-        EditFragment fragment = new EditFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+public class EditFragment extends BaseFragment {
+    @BindView(R.id.edit_txt_details)
+    EditText detailsEditText;
+    @BindView(R.id.edit_date)
+    EditText dateEditText;
+    @BindView(R.id.delete_image_view)
+    ImageView deleteImageView;
+    @BindView(R.id.btn_save)
+    MaterialButton saveButton;
+    public static final String EXTRA_TASK_NAME = "details";
+    public static final String EXTRA_TASK_DATE = "date";
+    public static final String EXTRA_TASK_STATUS = "status";
+    private EditViewModel viewModel;
+    private String taskName,date,status;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+        View view = inflater.inflate(R.layout.fragment_edit, container, false);
+        ButterKnife.bind(this, view);
+        if (getArguments() != null) {
+            Bundle bundle = getArguments();
+             taskName= bundle.getString(EXTRA_TASK_NAME);
+             date= bundle.getString(EXTRA_TASK_DATE);
+             status= bundle.getString(EXTRA_TASK_STATUS);
         }
+        return view;
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    public BaseViewModel getViewModel() {
+        viewModel = ViewModelProviders.of(this).get(EditViewModel.class);
+        return viewModel;
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    @OnClick(R.id.delete_image_view)
+    public void deleteTask(){
+        viewModel.removeTask(taskName);
+
+    }
+    @OnClick(R.id.btn_save)
+    public void editTask(){
+        TaskBody body=new TaskBody(taskName,date,status);
+        viewModel.editTask(body,taskName);
+
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }
