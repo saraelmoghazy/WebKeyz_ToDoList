@@ -23,13 +23,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class EditFragment extends BaseFragment {
-    @BindView(R.id.edit_txt_details)
+    @BindView(R.id.task_edit_text)
     EditText detailsEditText;
     @BindView(R.id.edit_date)
     EditText dateEditText;
     @BindView(R.id.delete_image_view)
     ImageView deleteImageView;
-    @BindView(R.id.btn_save)
+    @BindView(R.id.save_fab)
     MaterialButton saveButton;
     public static final String EXTRA_TASK_NAME = "arg";
     private EditViewModel viewModel;
@@ -45,6 +45,8 @@ public class EditFragment extends BaseFragment {
         if (getArguments() != null) {
             Bundle bundle = getArguments();
             task = (Task) bundle.getSerializable(EXTRA_TASK_NAME);
+            detailsEditText.setText(task.getName());
+            dateEditText.setText(task.getDate());
         }
         return view;
     }
@@ -61,10 +63,10 @@ public class EditFragment extends BaseFragment {
 
     }
 
-    @OnClick(R.id.btn_save)
+    @OnClick(R.id.save_fab)
      void editTask() {
         taskName = task.getName();
-        String date = task.getDate();
+        String date = detailsEditText.getText().toString();
         String status = task.getStatus();
         TaskBody body = new TaskBody(taskName, date, status);
         viewModel.editTask(body, taskName);

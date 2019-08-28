@@ -31,7 +31,7 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/details_edit_text"
+        android:id="@+id/task_edit_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
