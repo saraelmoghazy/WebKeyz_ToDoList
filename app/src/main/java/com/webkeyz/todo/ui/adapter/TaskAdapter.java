@@ -1,6 +1,7 @@
 package com.webkeyz.todo.ui.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -24,13 +28,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.webkeyz.todo.ui.MainFragment.TASK_FINISHED;
+
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
 
     private List<Task> list;
     private ColorGenerator mColorGenerator = ColorGenerator.DEFAULT;
     private TextDrawable mDrawableImage;
+    private Context context;
 
-    public TaskAdapter( List<Task> list){
+    public TaskAdapter(Context context, List<Task> list){
+        this.context = context;
         this.list = list;
     }
 
@@ -57,6 +65,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         long millisecond = Long.parseLong(longV);
         String dateString = DateFormat.format("MMM, dd yyyy", new Date(millisecond)).toString();
         holder.tvDate.setText(dateString);
+        if(list.get(position).getStatus().equals(TASK_FINISHED)){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                holder.cardView.setBackgroundColor(context.getColor(R.color.green));
+            }
+            else{
+                ContextCompat.getColor(context, R.color.green);
+            }
+        }
     }
 
     @Override
@@ -74,6 +90,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         TextView tvDate;
         @BindView(R.id.image)
         ImageView image;
+        @BindView(R.id.cardView)
+        CardView cardView;
 
         public MyViewHolder(View view){
             super(view);

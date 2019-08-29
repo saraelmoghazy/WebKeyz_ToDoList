@@ -15,9 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TimePicker;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +49,8 @@ import static com.webkeyz.todo.ui.MainFragment.BUNDLE_ID;
 import static com.webkeyz.todo.ui.MainFragment.BUNDLE_NAME;
 import static com.webkeyz.todo.ui.MainFragment.BUNDLE_STATUS;
 import static com.webkeyz.todo.ui.MainFragment.BUNDLE_TIMESTAMP;
+import static com.webkeyz.todo.ui.MainFragment.TASK_FINISHED;
+import static com.webkeyz.todo.ui.MainFragment.TASK_INIT;
 
 
 /**
@@ -72,8 +75,15 @@ public class EditTaskFragment extends BaseFragment {
     LottieAnimationView animation;
     @BindView(R.id.loadingAnimation)
     LottieAnimationView loadingAnimation;
+    @BindView(R.id.groupRadio)
+    RadioGroup groupRadio;
+    @BindView(R.id.initRadio)
+    RadioButton initRadio;
+    @BindView(R.id.finishRadio)
+    RadioButton finishRadio;
     private String id, name, content, timeStamp, status, date, time;
     private EditTaskViewModel viewModel;
+    private static String task_status;
 
     public EditTaskFragment() {
         // Required empty public constructor
@@ -110,16 +120,14 @@ public class EditTaskFragment extends BaseFragment {
         content = getArguments().getString(BUNDLE_CONTENT);
         timeStamp = getArguments().getString(BUNDLE_TIMESTAMP);
         status = getArguments().getString(BUNDLE_STATUS);
-
         init();
-        //TODO:: EDIT THE USER CAN CHOOSE RADIO BUTTON
 
         return view;
     }
 
     private void initToolbar() {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.edit_task));
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        /*((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.edit_task));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
     }
 
     private void init() {
@@ -127,9 +135,33 @@ public class EditTaskFragment extends BaseFragment {
         tlContent.getEditText().setText(content);
         long millisecond = Long.parseLong(timeStamp);
         String dateString = DateFormat.format("MMM, dd yyyy", new Date(millisecond)).toString();
+        time = DateFormat.format("yyyy-MM-dd", new Date(millisecond)).toString();
         tlDate.getEditText().setText(dateString);
-        String timeString = DateFormat.format("HH:mm", new Date(millisecond)).toString();
+        String timeString = DateFormat.format("HH:mm aa", new Date(millisecond)).toString();
+        time = DateFormat.format("HH:mm aa", new Date(millisecond)).toString();
         tlTime.getEditText().setText(timeString);
+        groupRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.finishRadio:
+                        task_status = TASK_FINISHED;
+                        break;
+                    case R.id.initRadio:
+                        task_status = TASK_INIT;
+                        break;
+                }
+            }
+        });
+        initRadioButton(status);
+    }
+
+    private void initRadioButton(String s) {
+        if (s.equals(TASK_FINISHED)) {
+            finishRadio.setChecked(true);
+        } else {
+            initRadio.setChecked(true);
+        }
     }
 
     @OnClick({R.id.linearLayout2, R.id.linearLayout3})
@@ -150,8 +182,8 @@ public class EditTaskFragment extends BaseFragment {
 
         Long mTimeStamp = 0L;
         String mDateTime = date + " " + time;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("EET"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm aa");
+        //dateFormat.setTimeZone(TimeZone.getTimeZone("EET"));
         try {
             Log.d(TAG, "onSaveClicked: " + mDateTime);
             Date date = dateFormat.parse(mDateTime);
@@ -164,7 +196,7 @@ public class EditTaskFragment extends BaseFragment {
         task.setContent(content);
         task.setDate(String.valueOf(mTimeStamp));
         task.setName(name);
-        task.setStatus("initial");
+        task.setStatus(task_status);
         viewModel.editTask(id, task);
         viewModel.getResponse().observe(this, addTaskResponse -> {
             Log.d(TAG, "onChanged: " + addTaskResponse.getMessage());
@@ -229,7 +261,10 @@ public class EditTaskFragment extends BaseFragment {
         mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                time = "" + selectedHour + ":" + selectedMinute;
+                if(selectedHour >= 0 && selectedHour <= 11)
+                    time = "" + (selectedHour == 0? selectedHour + 12 : selectedHour) + ":" + selectedMinute + " AM";
+                else
+                    time = "" + (selectedHour - 12) + ":" + selectedMinute + " PM";
                 tlTime.getEditText().setText(time);
             }
         }, hour, minute, false);

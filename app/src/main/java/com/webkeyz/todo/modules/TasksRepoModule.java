@@ -9,9 +9,10 @@ import dagger.Provides;
 @Module
 public class TasksRepoModule {
 
-    @Provides
     @RepoScope
-    public TasksRepo provideTaskRepo(){
+    @Provides
+    public TasksRepo provideDeleteTaskRepo(){
         return new TasksRepo();
     }
+
 }

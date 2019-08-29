@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.webkeyz.todo.baseCase.BaseObserver;
+import com.webkeyz.todo.baseCase.BaseResponse;
 import com.webkeyz.todo.baseCase.BaseViewModel;
-import com.webkeyz.todo.components.EditTaskUCComponent;
-import com.webkeyz.todo.model.AddTaskResponse;
+import com.webkeyz.todo.components.TasksUseCaseComponent;
 import com.webkeyz.todo.model.Task;
 import com.webkeyz.todo.usecase.EditTaskUseCase;
 
@@ -16,18 +16,18 @@ public class EditTaskViewModel extends BaseViewModel {
 
     @Inject
     EditTaskUseCase editTaskUseCase;
-    private MutableLiveData<AddTaskResponse> response = new MutableLiveData<>();
+    private MutableLiveData<BaseResponse> response = new MutableLiveData<>();
 
     public EditTaskViewModel(){
-        EditTaskUCComponent.Initializer.buildComponent().inject(this);
+        TasksUseCaseComponent.Initializer.buildComponent().inject(this);
     }
 
     public void editTask(String id, Task task){
         editTaskUseCase.setID(id);
         editTaskUseCase.setTask(task);
-       editTaskUseCase.execute(new BaseObserver<AddTaskResponse>(this){
+       editTaskUseCase.execute(new BaseObserver<BaseResponse>(this){
            @Override
-           public void onNext(AddTaskResponse addTaskResponse) {
+           public void onNext(BaseResponse addTaskResponse) {
                super.onNext(addTaskResponse);
                response.postValue(addTaskResponse);
            }
@@ -40,7 +40,7 @@ public class EditTaskViewModel extends BaseViewModel {
         editTaskUseCase.onClear();
     }
 
-    public LiveData<AddTaskResponse> getResponse(){
+    public LiveData<BaseResponse> getResponse(){
         return response;
     }
 }

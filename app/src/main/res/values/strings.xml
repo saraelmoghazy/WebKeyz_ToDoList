@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">ToDoList</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="not_found_tasks">Not found tasks</string>
     <string name="anything_to_add">Anything to add?</string>
     <string name="new_task">New Task</string>
@@ -15,4 +12,7 @@
     <string name="initial">Initial</string>
     <string name="finished">Finished</string>
     <string name="edit_task">Edit Task</string>
+    <string name="delete">Delete</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

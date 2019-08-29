@@ -1,36 +1,32 @@
 package com.webkeyz.todo.usecase;
 
+import com.webkeyz.todo.baseCase.BaseResponse;
 import com.webkeyz.todo.baseCase.BaseUseCase;
-import com.webkeyz.todo.components.EditTaskRepoComponent;
-import com.webkeyz.todo.model.AddTaskResponse;
 import com.webkeyz.todo.model.Task;
-import com.webkeyz.todo.repo.EditTaskRepo;
-
-import javax.inject.Inject;
+import com.webkeyz.todo.repo.TasksRepo;
 
 import io.reactivex.Observable;
 
-public class EditTaskUseCase extends BaseUseCase<AddTaskResponse> {
+public class EditTaskUseCase extends BaseUseCase<BaseResponse> {
 
-    @Inject
-    EditTaskRepo repo;
+    private TasksRepo repo;
     private Task task;
     private String id;
 
-    public EditTaskUseCase(){
-        EditTaskRepoComponent.initializer.builder().inject(this);
+    public EditTaskUseCase(TasksRepo repo) {
+        this.repo = repo;
     }
 
     @Override
-    public Observable<AddTaskResponse> getObservable() {
+    public Observable<BaseResponse> getObservable() {
         return repo.editTask(id, task);
     }
 
-    public void setID(String id){
+    public void setID(String id) {
         this.id = id;
     }
 
-    public void setTask(Task task){
+    public void setTask(Task task) {
         this.task = task;
     }
 }

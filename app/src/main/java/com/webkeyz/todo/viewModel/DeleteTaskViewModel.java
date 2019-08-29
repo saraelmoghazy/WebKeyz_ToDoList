@@ -5,30 +5,25 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.webkeyz.todo.baseCase.BaseResponse;
-import com.webkeyz.todo.components.TasksUseCaseComponent;
 import com.webkeyz.todo.model.ErrorResponse;
-import com.webkeyz.todo.model.Task;
-import com.webkeyz.todo.usecase.AddTaskUseCase;
+import com.webkeyz.todo.usecase.DeleteTaskUseCase;
 import com.webkeyz.todo.utils.RetrofitException;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
-
 import io.reactivex.observers.DisposableObserver;
 
-public class AddTaskViewModel extends ViewModel {
+public class DeleteTaskViewModel extends ViewModel {
 
-   @Inject
-    AddTaskUseCase addTaskUseCase;
+   // @Inject
+    DeleteTaskUseCase deleteTaskUseCase;
     private MutableLiveData<BaseResponse> response = new MutableLiveData<>();
     private MutableLiveData<String> errorResponse = new MutableLiveData<>();
 
-    public AddTaskViewModel(){
-        TasksUseCaseComponent.Initializer.buildComponent().inject(this);
+    public DeleteTaskViewModel(){
     }
 
-    public void addTask(Task task){
+    public void deleteTask(String id){
         DisposableObserver<BaseResponse> observer = new DisposableObserver<BaseResponse>() {
             @Override
             public void onNext(BaseResponse addTaskResponse) {
@@ -51,13 +46,13 @@ public class AddTaskViewModel extends ViewModel {
 
             }
         };
-        addTaskUseCase.observableTask(task, observer);
+        deleteTaskUseCase.observableTask(id, observer);
     }
 
     @Override
     protected void onCleared() {
         super.onCleared();
-        addTaskUseCase.setDisposable();
+        deleteTaskUseCase.setDisposable();
     }
 
     public LiveData<BaseResponse> getResponse(){
@@ -67,4 +62,5 @@ public class AddTaskViewModel extends ViewModel {
     public LiveData<String> getError(){
         return errorResponse;
     }
+
 }

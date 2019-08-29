@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.webkeyz.todo.baseCase.BaseResponse;
 import com.webkeyz.todo.components.RetrofitClientComponent;
 import com.webkeyz.todo.model.Task;
 import com.webkeyz.todo.remote.ClientAPI;
@@ -22,14 +23,29 @@ public class TasksRepo {
     ClientAPI clientAPI;
     private static final String TAG = TasksRepo.class.getSimpleName();
 
-    public TasksRepo()
-    {
-        RetrofitClientComponent.Initializer.buildComponent().inject(this);
+    public TasksRepo() {
+      RetrofitClientComponent.Initializer.buildComponent().inject(this);
     }
 
 
-    public Observable<List<Task>> observableTasks(){
+    public Observable<List<Task>> observableTasks() {
         return clientAPI.getTasks()
+                .toObservable();
+    }
+
+    public Observable<BaseResponse> addTask(Task task){
+        return clientAPI.addTask(task)
+                .toObservable();
+    }
+
+    public Observable<BaseResponse> deleteTask(String id) {
+        Log.d(TAG, "deleteTask: " + id);
+        return clientAPI.deleteTask(id)
+                .toObservable();
+    }
+
+    public Observable<BaseResponse> editTask(String id, Task task){
+        return clientAPI.editTask(id, task)
                 .toObservable();
     }
 }

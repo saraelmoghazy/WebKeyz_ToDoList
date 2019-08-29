@@ -14,15 +14,15 @@ public abstract class BaseUseCase<T> {
 
     public abstract Observable<T> getObservable();
 
-    public void execute( BaseObserver<T> observer){
-        this.observer  = observer;
+    public void execute(BaseObserver<T> observer) {
+        this.observer = observer;
         getObservable().subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(observer);
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
     }
 
-    public void onClear(){
-        if(!observer.isDisposed()){
+    public void onClear() {
+        if (!observer.isDisposed()) {
             observer.dispose();
         }
     }

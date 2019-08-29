@@ -24,13 +24,14 @@ public class BaseObserver<T> extends DisposableObserver<T> {
     public void onError(Throwable e) {
         {
             viewModel.getLoading().setValue(false);
-            RetrofitException exception = (RetrofitException) e;
+            viewModel.getError().setValue(e.getMessage());
+            /*RetrofitException exception = (RetrofitException) e;
             try {
                 ErrorResponse error = exception.getErrorBodyAs(ErrorResponse.class);
                 viewModel.getError().setValue(error.getMessage());
             } catch (IOException e1) {
                 e1.printStackTrace();
-            }
+            }*/
         }
     }
 
