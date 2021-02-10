@@ -1,4 +1,4 @@
-package com.webkeyz.todo;
+package com.webkeyz.entities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
